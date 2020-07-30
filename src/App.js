@@ -9,6 +9,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       books: [],
+      error: false,
       selected: {
         printType: 'all',
         bookType: 'ebooks'
@@ -28,13 +29,19 @@ class App extends React.Component {
       })
       .then(response => response.json())
       .then(data => {
+
+        if(data.totalItems === 0) {
+          throw new Error("No books found.")
+        }
+
         this.setState({
-          books: data.items
+          books: data.items,
+          error: false
         });
       })
       .catch(err => {
         this.setState({
-          // error: err.message
+          error: err.message
         });
       });
   }
@@ -50,8 +57,7 @@ class App extends React.Component {
     })
   }
   render() {
-    // const page = this.state.showBookInfo
-    // ? "" : ""
+    const none = this.state.error ? "No books found." : <BookSearchList books={this.state.books} />
     return (
       <div className="App" >
         <header>
@@ -59,7 +65,7 @@ class App extends React.Component {
         </header>
         <SearchBox handleSearch={this.handleSearch} />
         <FilterOptionsBox selected={this.state.selected} updatePrintType={this.updatePrintType} updateBookType={this.updateBookType} />
-        <BookSearchList books={this.state.books} />
+        {none}
       </div>
     );
   }
