@@ -1,0 +1,15 @@
+
+li div {
+    border-bottom: 1px gray solid;
+    display: flex;
+}
+
+li div > div {
+    flex-direction: column;
+    flex: 1 0 0;
+    text-align:  center;
+}
+
+li div > img {
+    width: 100px;
+}
